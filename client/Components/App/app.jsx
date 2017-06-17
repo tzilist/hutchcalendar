@@ -1,24 +1,51 @@
 import React from 'react';
-import BigCalendar from 'react-big-calendar';
-import moment from 'moment';
+import request from 'superagent';
+import Calendar from '../Calendar/Calendar.jsx';
+import Header from '../Header/Header.jsx';
 
-import events from './events';
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      conferenceRooms: [],
+    };
+    this.setUsers = this.setUsers.bind(this);
+  }
 
-import "./styles.css";
-import "react-big-calendar/lib/css/react-big-calendar.css"
+  componentDidMount() {
+    request
+      .get('/api/user')
+      .end((err, res) => {
+        if (err) throw Error(err);
+        this.setUsers(res.body.data);
+      });
 
-BigCalendar.setLocalizer(
-  BigCalendar.momentLocalizer(moment),
-);
+    request
+      .get('/api/conference-room')
+      .end((err, res) => {
+        if (err) throw Error(err);
+        this.setConferenceRooms(res.body.data);
+      });
+  }
 
-const Calendar = props => (
-  <div className="container">
-    <BigCalendar
-      events={events}
-      startAccessor='start'
-      endAccessor='end'
-    />
-  </div>
-);
+  setConferenceRooms(conferenceRooms) {
+    this.setState({ conferenceRooms });
+  }
 
-export default Calendar
+  setUsers(users) {
+    this.setState({ users });
+  }
+
+  render() {
+    return (
+      <div>
+        <Header
+          users={this.state.users}
+          conferenceRooms={this.state.conferenceRooms}
+          />
+        <Calendar />
+      </div>
+    );
+  }
+}
