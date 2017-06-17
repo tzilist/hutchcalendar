@@ -19,8 +19,10 @@ defmodule HutchCalendar.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", HutchCalendar do
-  #   pipe_through :api
-  # end
+
+  scope "/api", HutchCalendar do
+    pipe_through :api
+
+    resources "/conference-room", ConferenceRoom
+  end
 end
