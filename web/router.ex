@@ -24,6 +24,7 @@ defmodule HutchCalendar.Router do
     pipe_through :api
 
     resources "/conference-room", ConferenceRoomController
+    resources "/reservations", ReservationController
     resources "/user", UserController
   end
 end

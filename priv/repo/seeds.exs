@@ -13,5 +13,30 @@
 reminder_types = ["email", "text"]
 
 Enum.each(reminder_types, fn x ->
-  HutchCalendar.Repo.insert!(%HutchCalendar.ReminderType{type: x})
+  HutchCalendar.Repo.get_by(HutchCalendar.ReminderType, type: x)
+  |> case do
+    nil -> HutchCalendar.Repo.insert!(%HutchCalendar.ReminderType{type: x})
+    _ -> nil
+  end
+end)
+
+conference_rooms = ["Init Room"]
+
+Enum.each(conference_rooms, fn x ->
+  HutchCalendar.Repo.get_by(HutchCalendar.ConferenceRoom, name: x)
+  |> case do
+    nil -> HutchCalendar.Repo.insert!(%HutchCalendar.ConferenceRoom{name: x})
+    _ -> nil
+  end
+end)
+
+
+conference_rooms = ["Ted"]
+
+Enum.each(conference_rooms, fn x ->
+  HutchCalendar.Repo.get_by(HutchCalendar.User, name: x)
+  |> case do
+    nil -> HutchCalendar.Repo.insert!(%HutchCalendar.User{name: x})
+    _ -> nil
+  end
 end)

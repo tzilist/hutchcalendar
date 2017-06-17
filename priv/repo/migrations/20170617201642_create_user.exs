@@ -3,7 +3,7 @@ defmodule HutchCalendar.Repo.Migrations.CreateUser do
 
   def change do
     create table(:users) do
-      add :name, :string
+      add :name, :string, null: false
 
       timestamps()
     end
