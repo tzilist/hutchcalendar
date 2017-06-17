@@ -6,7 +6,7 @@ defmodule HutchCalendar.Repo.Migrations.CreateReservationUsers do
       add :reminder_time, :utc_datetime, null: false
       add :user_id, references(:users, on_delete: :delete_all), null: false
       add :reservation_id, references(:reservations, on_delete: :delete_all), null: false
-      add :reminder, references(:reminder_types, on_delete: :delete_all), null: false
+      add :reminder, references(:reminder_types, column: :type, type: :string, on_delete: :delete_all), null: false
 
       timestamps()
     end

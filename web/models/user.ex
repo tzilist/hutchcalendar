@@ -3,7 +3,9 @@ defmodule HutchCalendar.User do
 
   schema "users" do
     field :name, :string
-
+    field :email, :string
+    field :phone_number_extension, :integer
+    field :phone_number, :integer
     timestamps()
   end
 
@@ -12,7 +14,7 @@ defmodule HutchCalendar.User do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name])
+    |> cast(params, [:name, :email, :phone_number_extension, :phone_number])
     |> validate_required([:name])
   end
 end

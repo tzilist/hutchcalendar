@@ -26,5 +26,7 @@ defmodule HutchCalendar.Router do
     resources "/conference-room", ConferenceRoomController
     resources "/reservations", ReservationController
     resources "/user", UserController
+    resources "/invitation", InvitationController
+    resources "/reservation-users", ReservationUserController
   end
 end

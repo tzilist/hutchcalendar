@@ -15,7 +15,7 @@ defmodule HutchCalendar.ReservationUserController do
       {:ok, reservation_users} ->
         conn
         |> put_status(:created)
-        |> put_resp_header("location", reservation_users_path(conn, :show, reservation_users))
+        |> put_resp_header("location", reservation_user_path(conn, :show, reservation_users))
         |> render("show.json", reservation_users: reservation_users)
       {:error, changeset} ->
         conn
