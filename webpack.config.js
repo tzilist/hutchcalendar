@@ -1,14 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-
 
 module.exports = {
   entry: {
-    bundle: [require.resolve('./client/polyfills.js'), './client/app.jsx'],
+    bundle: [require.resolve('./client/polyfills.js'), './client/index.jsx'],
   },
   output: {
     filename: 'js/[name].js',
@@ -82,11 +79,12 @@ module.exports = {
     }),
     new ExtractTextPlugin({
       allChunks: true,
-      filename: 'css/[name].css'
+      filename: 'css/[name].css',
     }),
     new HtmlWebpackPlugin({
       title: 'Hutch Calendar',
       filename: 'index.html',
+      template: 'client/index.html',
     }),
   ],
 };
