@@ -23,6 +23,7 @@ defmodule HutchCalendar.Router do
   scope "/api", HutchCalendar do
     pipe_through :api
 
-    resources "/conference-room", ConferenceRoom
+    resources "/conference-room", ConferenceRoomController
+    resources "/user", UserController
   end
 end
