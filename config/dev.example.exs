@@ -35,8 +35,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :hutch_calendar, HutchCalendar.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "tzilist",
-  password: "",
+  username: "postgres",
+  password: "postgres",
   database: "hutch_calendar_dev",
   hostname: "localhost",
   pool_size: 10
