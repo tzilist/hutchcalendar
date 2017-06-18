@@ -17,27 +17,28 @@ export default class App extends React.Component {
     this.addAppointment = this.addAppointment.bind(this);
     this.showConferenceRoomModal = this.showConferenceRoomModal.bind(this);
     this.hideConferenceRoomModal = this.hideConferenceRoomModal.bind(this);
+    this.deleteAppointment = this.deleteAppointment.bind(this);
   }
 
   componentDidMount() {
     request
       .get('/api/user')
       .end((err, res) => {
-        if (err) throw Error(err);
+        if (err) throw err;
         this.setUsers(res.body.data);
       });
 
     request
       .get('/api/conference-room')
       .end((err, res) => {
-        if (err) throw Error(err);
+        if (err) throw err;
         this.setConferenceRooms(res.body.data);
       });
 
     request
       .get('/api/reservations')
       .end((err, res) => {
-        if (err) throw Error(err);
+        if (err) throw err;
         this.setEvents(res.body.data);
       });
   }
@@ -81,7 +82,7 @@ export default class App extends React.Component {
       .post('/api/conference-room')
       .send(body)
       .end((err, res) => {
-        if (err) throw Error(err);
+        if (err) throw err;
         const { conferenceRooms } = this.state;
         this.setState({ conferenceRooms: [...conferenceRooms, res.body.data] });
       });
@@ -92,7 +93,7 @@ export default class App extends React.Component {
       reservation: {
         time_start: start,
         time_end: end,
-        conference_room_id: roomId,
+        conference_room_id: parseInt(roomId, 10),
         title,
       },
     };
@@ -100,7 +101,7 @@ export default class App extends React.Component {
       .post('/api/reservations')
       .send(body)
       .end((err, res) => {
-        if (err) throw Error(err);
+        if (err) throw err;
         const events = [...this.state.events];
         const {
           title,
@@ -113,6 +114,16 @@ export default class App extends React.Component {
       });
   }
 
+
+  deleteAppointment(reservationId) {
+    request
+      .delete(`/api/reservations/${reservationId}`)
+      .end((err, res) => {
+        if (err) throw err;
+        console.log(res);
+      });
+    }
+
   render() {
     return (
       <div>
@@ -123,6 +134,7 @@ export default class App extends React.Component {
         />
         <Calendar
           addAppointment={this.addAppointment}
+          deleteAppointment={this.deleteAppointment}
           events={this.state.events}
           rooms={[...this.state.conferenceRooms]}
         />

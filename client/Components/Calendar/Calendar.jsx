@@ -43,7 +43,7 @@ class Calendar extends React.Component {
         <BigCalendar
           selectable
           onSelectSlot={this.showEditReservationModal}
-          onSelectEvent={event => console.log(event)}
+          onSelectEvent={this.showEditReservationModal}
           events={this.props.events}
         />
         <EditReservationModal
@@ -51,6 +51,7 @@ class Calendar extends React.Component {
           hide={this.hideEditReservationModal}
           info={{...this.state.info}}
           addAppointment={this.props.addAppointment}
+          deleteAppointment={this.props.deleteAppointment}
           rooms={this.props.rooms}
         />
       </div>
