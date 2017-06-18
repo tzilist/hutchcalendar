@@ -48,6 +48,7 @@ export default class App extends React.Component {
         start: new Date(event.time_start),
         end: new Date(event.time_end),
         title: event.title,
+        id: event.id
       }
     ));
 
@@ -86,13 +87,13 @@ export default class App extends React.Component {
       });
   }
 
-  addAppointment(slotInfo) {
+  addAppointment(start, end, title, roomId) {
     const body = {
       reservation: {
-        time_start: slotInfo.start,
-        time_end: slotInfo.end,
-        conference_room_id: 1,
-        title: 'test appointment',
+        time_start: start,
+        time_end: end,
+        conference_room_id: roomId,
+        title,
       },
     };
     request
@@ -105,8 +106,9 @@ export default class App extends React.Component {
           title,
           time_end: end,
           time_start: start,
+          id,
         } = res.body.data;
-        events.push({ title, end: new Date(end), start: new Date(start) });
+        events.push({ id, title, end: new Date(end), start: new Date(start) });
         this.setState({ events });
       });
   }
@@ -122,6 +124,7 @@ export default class App extends React.Component {
         <Calendar
           addAppointment={this.addAppointment}
           events={this.state.events}
+          rooms={[...this.state.conferenceRooms]}
         />
         <NewConferenceRoomModal
           show={this.state.showNewConferenceRoomModal}

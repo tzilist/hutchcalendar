@@ -11,6 +11,5 @@ defmodule HutchCalendar.ReservationService do
       select: res.id
 
     Repo.all(query)
-    |> IO.inspect
   end
 end
