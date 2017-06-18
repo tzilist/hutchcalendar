@@ -69,7 +69,7 @@ module.exports = {
       chunks: ['commons'],
       minChunks(module) {
         const { context } = module;
-        return context && (context.indexOf('react') !== -1 || context.indexOf('immutable') !== -1);
+        return context && (context.indexOf('react') !== -1);
       },
     }),
     new webpack.optimize.CommonsChunkPlugin({

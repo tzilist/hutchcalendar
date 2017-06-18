@@ -40,17 +40,27 @@ defmodule HutchCalendar.ReservationController do
     render(conn, "show.json", reservation: reservation)
   end
 
-  def update(conn, %{"id" => id, "reservation" => reservation_params}) do
-    reservation = Repo.get!(Reservation, id)
-    changeset = Reservation.changeset(reservation, reservation_params)
+  def update(conn, %{"id" => id, "reservation" => %{"time_end" => time_end,
+                                        "time_start" => time_start,
+                                        "conference_room_id" => room_id} = reservation_params}) do
+    ReservationService.query_availability(time_start, time_end, room_id)
+    |> case do
+      [] ->
+        reservation = Repo.get!(Reservation, id)
+        changeset = Reservation.changeset(reservation, reservation_params)
 
-    case Repo.update(changeset) do
-      {:ok, reservation} ->
-        render(conn, "show.json", reservation: reservation)
-      {:error, changeset} ->
+        case Repo.update(changeset) do
+          {:ok, reservation} ->
+            render(conn, "show.json", reservation: reservation)
+          {:error, changeset} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render(HutchCalendar.ChangesetView, "error.json", changeset: changeset)
+        end
+      _ ->
         conn
-        |> put_status(:unprocessable_entity)
-        |> render(HutchCalendar.ChangesetView, "error.json", changeset: changeset)
+        |> put_status(:conflict)
+        |> render(HutchCalendar.ErrorView, "409.json")
     end
   end
 

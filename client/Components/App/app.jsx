@@ -99,7 +99,6 @@ export default class App extends React.Component {
         time_end: end,
         conference_room_id: parseInt(roomId, 10),
         title,
-        invitations: [{ user_id: 1, reservation_id: 10 }, { user_id: 2, reservation_id: 10 }],
       },
     };
     request
@@ -116,7 +115,6 @@ export default class App extends React.Component {
           }
           return;
         }
-        console.log(res);
         const events = [...this.state.events];
         const {
           title,
