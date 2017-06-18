@@ -2,7 +2,8 @@
 
 To start your Phoenix app:
 
-  * Install dependencies with `mix deps.get`
+  * Install Elixir dependencies with `mix deps.get`
+  * Install node dependencies with `yarn` or `npm install`
   * Create and edit the file `/config/dev.exs`. See `dev.example.exs` for an example config.
   The big thing to do here really is set up your PSQL uname/pw
   * Create and setup your database with `mix ecto.setup`
