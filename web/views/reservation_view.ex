@@ -13,6 +13,7 @@ defmodule HutchCalendar.ReservationView do
     %{id: reservation.id,
       conference_room_id: reservation.conference_room_id,
       time_start: reservation.time_start,
-      time_end: reservation.time_end}
+      time_end: reservation.time_end,
+      title: reservation.title}
   end
 end

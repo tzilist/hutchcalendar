@@ -2,6 +2,7 @@ import React from 'react';
 import request from 'superagent';
 import Calendar from '../Calendar/Calendar.jsx';
 import Header from '../Header/Header.jsx';
+import NewConferenceRoomModal from '../Modals/NewConferenceRoomModal.jsx';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -10,9 +11,12 @@ export default class App extends React.Component {
       users: [],
       conferenceRooms: [],
       events: [],
+      showNewConferenceRoomModal: false,
     };
     this.addConferenceRoom = this.addConferenceRoom.bind(this);
     this.addAppointment = this.addAppointment.bind(this);
+    this.showConferenceRoomModal = this.showConferenceRoomModal.bind(this);
+    this.hideConferenceRoomModal = this.hideConferenceRoomModal.bind(this);
   }
 
   componentDidMount() {
@@ -39,6 +43,7 @@ export default class App extends React.Component {
   }
 
   setEvents(initialEvents) {
+    console.log(initialEvents);
     const events = initialEvents.map(event => (
       {
         start: new Date(event.time_start),
@@ -58,8 +63,15 @@ export default class App extends React.Component {
     this.setState({ users });
   }
 
-  addConferenceRoom() {
-    const name = window.prompt('What should this conference room be called?')
+  showConferenceRoomModal() {
+    this.setState({ showNewConferenceRoomModal: true });
+  }
+
+  hideConferenceRoomModal() {
+    this.setState({ showNewConferenceRoomModal: false });
+  }
+
+  addConferenceRoom(name) {
     const body = {
       conference_room: {
         name,
@@ -106,11 +118,16 @@ export default class App extends React.Component {
         <Header
           users={this.state.users}
           conferenceRooms={this.state.conferenceRooms}
-          addConferenceRoom={this.addConferenceRoom}
+          showConferenceRoomModal={this.showConferenceRoomModal}
         />
         <Calendar
           addAppointment={this.addAppointment}
           events={this.state.events}
+        />
+        <NewConferenceRoomModal
+          show={this.state.showNewConferenceRoomModal}
+          hide={this.hideConferenceRoomModal}
+          addConferenceRoom={this.addConferenceRoom}
         />
       </div>
     );

@@ -14,6 +14,7 @@ const Calendar = props => (
     <BigCalendar
       selectable
       onSelectSlot={props.addAppointment}
+      onSelectEvent={event => console.log(event)}
       events={props.events}
       startAccessor='start'
       endAccessor='end'

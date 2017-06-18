@@ -15,7 +15,7 @@ const NavBarHeader = (props) => (
       <NavDropdown eventKey={3} title="Conference Rooms" id="basic-nav-dropdown">
         <MenuItem
           eventKey={3.1}
-          onClick={props.addConferenceRoom}
+          onClick={props.showConferenceRoomModal}
         >
           Add Room
         </MenuItem>

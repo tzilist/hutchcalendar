@@ -4,7 +4,6 @@ import NavBarHeader from '../NavBar/NavBar.jsx';
 
 export default class Header extends React.Component {
   render() {
-    console.log(this.props);
     const { users, conferenceRooms } = this.props;
     const usersList = users.map(user => (
       <li key={`${user.id}-user`}>
@@ -21,7 +20,7 @@ export default class Header extends React.Component {
 
     return (
       <div>
-        <NavBarHeader addConferenceRoom={this.props.addConferenceRoom} />
+        <NavBarHeader showConferenceRoomModal={this.props.showConferenceRoomModal} />
         <span>Users</span>
         <ul>{usersList}</ul>
         <span>Conference Rooms</span>
