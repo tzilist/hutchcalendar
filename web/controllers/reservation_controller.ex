@@ -43,7 +43,7 @@ defmodule HutchCalendar.ReservationController do
   def update(conn, %{"id" => id, "reservation" => %{"time_end" => time_end,
                                         "time_start" => time_start,
                                         "conference_room_id" => room_id} = reservation_params}) do
-    ReservationService.query_availability(time_start, time_end, room_id)
+    ReservationService.query_availability(time_start, time_end, room_id, id)
     |> case do
       [] ->
         reservation = Repo.get!(Reservation, id)

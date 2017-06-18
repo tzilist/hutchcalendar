@@ -107,7 +107,7 @@ export default class App extends React.Component {
       .end((err, res) => {
         if (err) {
           if (res.body && res.body.errors && res.body.errors.message) {
-            this.setState({ alerts: [res.body.message] });
+            this.setState({ alerts: [res.body.errors.message] });
           } else if (res.body && res.body.errors && res.body.errors.title) {
             this.setState({ alerts: ['Title cannot be blank'] });
           } else {
@@ -140,7 +140,16 @@ export default class App extends React.Component {
       .put(`/api/reservations/${id}`)
       .send(body)
       .end((err, res) => {
-        if (err) throw err;
+        if (err) {
+          if (res.body && res.body.errors && res.body.errors.message) {
+            this.setState({ alerts: [res.body.errors.message] });
+          } else if (res.body && res.body.errors && res.body.errors.title) {
+            this.setState({ alerts: ['Title cannot be blank'] });
+          } else {
+            this.setState({ alerts: ['There was an error'] });
+          }
+          return;
+        }
         const { events: initialEvents } = this.state;
 
         const events = initialEvents.map((ev) => {
@@ -151,7 +160,7 @@ export default class App extends React.Component {
               time_start: start,
               id,
             } = res.body.data;
-            return { title, end, start, id };
+            return { title, end: new Date(end), start: new Date(start), id };
           }
           return ev;
         });
