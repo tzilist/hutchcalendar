@@ -10,7 +10,8 @@ defmodule HutchCalendar.ErrorView do
   end
 
   def render("409.json", _assigns) do
-    "Conflict"
+    %{"status" => 409,
+    "errors" => %{"message" => "There is already a meeting time in this room"}}
   end
 
   # In case no render clause matches or no

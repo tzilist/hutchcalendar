@@ -99,6 +99,7 @@ export default class App extends React.Component {
         time_end: end,
         conference_room_id: parseInt(roomId, 10),
         title,
+        invitations: [{ user_id: 1, reservation_id: 10 }, { user_id: 2, reservation_id: 10 }],
       },
     };
     request
@@ -106,14 +107,16 @@ export default class App extends React.Component {
       .send(body)
       .end((err, res) => {
         if (err) {
-          const errStr = err.toString();
-          if (errStr.includes('Conflict')) {
-            this.setState({ alerts: ['There was a conflict!'] });
+          if (res.body && res.body.errors && res.body.errors.message) {
+            this.setState({ alerts: [res.body.message] });
+          } else if (res.body && res.body.errors && res.body.errors.title) {
+            this.setState({ alerts: ['Title cannot be blank'] });
           } else {
-            this.setState({ alerts: ['Meeting must have a title'] });
+            this.setState({ alerts: ['There was an error'] });
           }
           return;
         }
+        console.log(res);
         const events = [...this.state.events];
         const {
           title,

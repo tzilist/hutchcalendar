@@ -31,12 +31,17 @@ Enum.each(conference_rooms, fn x ->
 end)
 
 
-conference_rooms = ["Ted"]
+users = [%{name: "Ted",
+           email: "tzilist@gmail.com"},
+         %{name: "Victor",
+           email: "victor@hutch.com"}]
 
-Enum.each(conference_rooms, fn x ->
-  HutchCalendar.Repo.get_by(HutchCalendar.User, name: x)
+Enum.each(users, fn x ->
+  HutchCalendar.Repo.get_by(HutchCalendar.User, name: x.name)
   |> case do
-    nil -> HutchCalendar.Repo.insert!(%HutchCalendar.User{name: x})
+    nil ->
+      changeset = HutchCalendar.User.changeset(%HutchCalendar.User{}, x)
+      HutchCalendar.Repo.insert!(changeset)
     _ -> nil
   end
 end)

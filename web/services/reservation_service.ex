@@ -12,4 +12,5 @@ defmodule HutchCalendar.ReservationService do
 
     Repo.all(query)
   end
+
 end

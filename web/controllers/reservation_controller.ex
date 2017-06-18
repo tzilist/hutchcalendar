@@ -9,12 +9,13 @@ defmodule HutchCalendar.ReservationController do
     render(conn, "index.json", reservations: reservations)
   end
 
-  def create(conn, %{"reservation" => %{"time_end" => time_end, "time_start" => time_start, "conference_room_id" => room_id} = reservation_params}) do
+  def create(conn, %{"reservation" => %{"time_end" => time_end,
+                                        "time_start" => time_start,
+                                        "conference_room_id" => room_id} = reservation_params}) do
     ReservationService.query_availability(time_start, time_end, room_id)
     |> case do
     [] ->
       changeset = Reservation.changeset(%Reservation{}, reservation_params)
-      IO.inspect changeset
 
       case Repo.insert(changeset) do
         {:ok, reservation} ->

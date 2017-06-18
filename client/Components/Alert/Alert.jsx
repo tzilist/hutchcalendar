@@ -19,7 +19,6 @@ export default class AnimatedAlert extends React.PureComponent {
   }
 
   render() {
-    console.log(this.props);
     return <Alert stack />;
   }
 }
