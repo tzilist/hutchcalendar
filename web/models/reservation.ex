@@ -4,7 +4,8 @@ defmodule HutchCalendar.Reservation do
   schema "reservations" do
     field :time_start, Ecto.DateTime
     field :time_end, Ecto.DateTime
-    belongs_to :conference_room, HutchCalendar.ConferenceRoom
+    field :title, :string
+    field :conference_room_id, :integer
 
     timestamps()
   end
@@ -14,7 +15,8 @@ defmodule HutchCalendar.Reservation do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:time_start, :time_end])
-    |> validate_required([:time_start, :time_end])
+    |> cast(params, [:time_start, :time_end, :conference_room_id, :title])
+    |> validate_required([:time_start, :time_end, :title])
+    |> foreign_key_constraint(:conference_room_id)
   end
 end
