@@ -89,8 +89,8 @@ export default class App extends React.Component {
   addAppointment(slotInfo) {
     const body = {
       reservation: {
-        time_start: new Date(slotInfo.start),
-        time_end: new Date(slotInfo.end),
+        time_start: slotInfo.start,
+        time_end: slotInfo.end,
         conference_room_id: 1,
         title: 'test appointment',
       },
@@ -106,7 +106,7 @@ export default class App extends React.Component {
           time_end: end,
           time_start: start,
         } = res.body.data;
-        events.push({ title, end, start });
+        events.push({ title, end: new Date(end), start: new Date(start) });
         this.setState({ events });
       });
   }

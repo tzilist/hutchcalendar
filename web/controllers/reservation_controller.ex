@@ -9,24 +9,27 @@ defmodule HutchCalendar.ReservationController do
     render(conn, "index.json", reservations: reservations)
   end
 
-  def create(conn, %{"reservation" => %{
-      "time_end" => time_end,
-      "time_start" => time_start,
-      "conference_room_id" => room_id
-    } = reservation_params}) do
-    info = ReservationService.query_availability(time_start, time_end, room_id)
-    changeset = Reservation.changeset(%Reservation{}, reservation_params)
+  def create(conn, %{"reservation" => %{"time_end" => time_end, "time_start" => time_start, "conference_room_id" => room_id} = reservation_params}) do
+    ReservationService.query_availability(time_start, time_end, room_id)
+    |> case do
+    [] ->
+       changeset = Reservation.changeset(%Reservation{}, reservation_params)
 
-    case Repo.insert(changeset) do
-      {:ok, reservation} ->
+      case Repo.insert(changeset) do
+        {:ok, reservation} ->
+          conn
+          |> put_status(:created)
+          |> put_resp_header("location", reservation_path(conn, :show, reservation))
+          |> render("show.json", reservation: reservation)
+          {:error, changeset} ->
+            conn
+            |> put_status(:unprocessable_entity)
+            |> render(HutchCalendar.ChangesetView, "error.json", changeset: changeset)
+          end
+      _ ->
         conn
-        |> put_status(:created)
-        |> put_resp_header("location", reservation_path(conn, :show, reservation))
-        |> render("show.json", reservation: reservation)
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(HutchCalendar.ChangesetView, "error.json", changeset: changeset)
+        |> put_status(:conflict)
+        |> render(HutchCalendar.ErrorView, "409.json")
     end
   end
 
