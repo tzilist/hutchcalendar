@@ -2,13 +2,19 @@ defmodule HutchCalendar.ReservationController do
   use HutchCalendar.Web, :controller
 
   alias HutchCalendar.Reservation
+  alias HutchCalendar.ReservationService
 
   def index(conn, _params) do
     reservations = Repo.all(Reservation)
     render(conn, "index.json", reservations: reservations)
   end
 
-  def create(conn, %{"reservation" => reservation_params}) do
+  def create(conn, %{"reservation" => %{
+      "time_end" => time_end,
+      "time_start" => time_start,
+      "conference_room_id" => room_id
+    } = reservation_params}) do
+    info = ReservationService.query_availability(time_start, time_end, room_id)
     changeset = Reservation.changeset(%Reservation{}, reservation_params)
 
     case Repo.insert(changeset) do

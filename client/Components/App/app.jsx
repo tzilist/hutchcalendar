@@ -43,7 +43,6 @@ export default class App extends React.Component {
   }
 
   setEvents(initialEvents) {
-    console.log(initialEvents);
     const events = initialEvents.map(event => (
       {
         start: new Date(event.time_start),
