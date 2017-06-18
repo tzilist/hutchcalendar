@@ -13,7 +13,8 @@ defmodule HutchCalendar.ReservationController do
     ReservationService.query_availability(time_start, time_end, room_id)
     |> case do
     [] ->
-       changeset = Reservation.changeset(%Reservation{}, reservation_params)
+      changeset = Reservation.changeset(%Reservation{}, reservation_params)
+      IO.inspect changeset
 
       case Repo.insert(changeset) do
         {:ok, reservation} ->

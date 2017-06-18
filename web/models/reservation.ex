@@ -2,8 +2,8 @@ defmodule HutchCalendar.Reservation do
   use HutchCalendar.Web, :model
 
   schema "reservations" do
-    field :time_start, Ecto.DateTime
-    field :time_end, Ecto.DateTime
+    field :time_start, :utc_datetime
+    field :time_end, :utc_datetime
     field :title, :string
     field :conference_room_id, :integer
 
