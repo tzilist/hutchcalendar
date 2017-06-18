@@ -3,6 +3,8 @@ import request from 'superagent';
 import Calendar from '../Calendar/Calendar.jsx';
 import Header from '../Header/Header.jsx';
 import NewConferenceRoomModal from '../Modals/NewConferenceRoomModal.jsx';
+import AnimatedAlert from '../Alert/Alert.jsx';
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -12,6 +14,7 @@ export default class App extends React.Component {
       conferenceRooms: [],
       events: [],
       showNewConferenceRoomModal: false,
+      alerts: [],
     };
     this.addConferenceRoom = this.addConferenceRoom.bind(this);
     this.addAppointment = this.addAppointment.bind(this);
@@ -50,7 +53,7 @@ export default class App extends React.Component {
         start: new Date(event.time_start),
         end: new Date(event.time_end),
         title: event.title,
-        id: event.id
+        id: event.id,
       }
     ));
 
@@ -102,7 +105,15 @@ export default class App extends React.Component {
       .post('/api/reservations')
       .send(body)
       .end((err, res) => {
-        if (err) throw err;
+        if (err) {
+          const errStr = err.toString();
+          if (errStr.includes('Conflict')) {
+            this.setState({ alerts: ['There was a conflict!'] });
+          } else {
+            this.setState({ alerts: ['Meeting must have a title'] });
+          }
+          return;
+        }
         const events = [...this.state.events];
         const {
           title,
@@ -179,6 +190,7 @@ export default class App extends React.Component {
           hide={this.hideConferenceRoomModal}
           addConferenceRoom={this.addConferenceRoom}
         />
+        <AnimatedAlert alerts={this.state.alerts}/>
       </div>
     );
   }
