@@ -52,6 +52,7 @@ class Calendar extends React.Component {
           info={{...this.state.info}}
           addAppointment={this.props.addAppointment}
           deleteAppointment={this.props.deleteAppointment}
+          updateAppointment={this.props.updateAppointment}
           rooms={this.props.rooms}
         />
       </div>

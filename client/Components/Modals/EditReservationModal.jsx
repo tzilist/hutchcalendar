@@ -28,10 +28,11 @@ class EditReservationModal extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { start, end } = nextProps.info;
+    const { start, end, title } = nextProps.info;
     this.setState({
       start,
       end,
+      title,
     });
   }
 
@@ -49,8 +50,12 @@ class EditReservationModal extends React.Component {
 
   handleCreateAppointment() {
     const { start, end, title } = this.state;
-    this.props.addAppointment(start, end, title, this.room.value)
-    this.props.hide();
+    const room = this.room.value;
+    const { info, updateAppointment, addAppointment, hide } = this.props;
+    info.id ?
+      updateAppointment(start, end, title, room, info.id) :
+      addAppointment(start, end, title, room);
+    hide();
   }
 
   deleteAppointment() {
@@ -66,7 +71,7 @@ class EditReservationModal extends React.Component {
     const showDelete = (this.props.info.id) ?
       <Button bsStyle="danger" onClick={this.deleteAppointment}>Delete</Button> :
       null;
-    const createOrUpdate = (this.props.info.id) ? 'Update' : create;
+    const createOrUpdate = (this.props.info.id) ? 'Update' : 'Create';
     return (
       <Modal show={this.props.show} onHide={this.props.hide}>
         <Modal.Header closeButton>
@@ -107,8 +112,8 @@ class EditReservationModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.hide}>Close</Button>
-          <Button onClick={this.handleCreateAppointment}>{createOrUpdate}</Button>
           {showDelete}
+          <Button bsStyle="primary" onClick={this.handleCreateAppointment}>{createOrUpdate}</Button>
         </Modal.Footer>
       </Modal>
     );

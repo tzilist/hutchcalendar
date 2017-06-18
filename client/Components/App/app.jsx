@@ -18,6 +18,7 @@ export default class App extends React.Component {
     this.showConferenceRoomModal = this.showConferenceRoomModal.bind(this);
     this.hideConferenceRoomModal = this.hideConferenceRoomModal.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
+    this.updateAppointment = this.updateAppointment.bind(this);
   }
 
   componentDidMount() {
@@ -114,6 +115,39 @@ export default class App extends React.Component {
       });
   }
 
+  updateAppointment(start, end, title, roomId, id) {
+    const body = {
+      reservation: {
+        time_start: start,
+        time_end: end,
+        conference_room_id: parseInt(roomId, 10),
+        title,
+      },
+    };
+    request
+      .put(`/api/reservations/${id}`)
+      .send(body)
+      .end((err, res) => {
+        if (err) throw err;
+        const { events: initialEvents } = this.state;
+
+        const events = initialEvents.map((ev) => {
+          if (ev.id === id) {
+            const {
+              title,
+              time_end: end,
+              time_start: start,
+              id,
+            } = res.body.data;
+            return { title, end, start, id };
+          }
+          return ev;
+        });
+
+        this.setState({ events });
+      });
+  }
+
 
   deleteAppointment(reservationId) {
     request
@@ -136,6 +170,7 @@ export default class App extends React.Component {
         <Calendar
           addAppointment={this.addAppointment}
           deleteAppointment={this.deleteAppointment}
+          updateAppointment={this.updateAppointment}
           events={this.state.events}
           rooms={[...this.state.conferenceRooms]}
         />

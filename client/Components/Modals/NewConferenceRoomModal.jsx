@@ -48,7 +48,7 @@ class NewConferenceRoomModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={this.props.hide}>Close</Button>
-          <Button onClick={this.createNewConference}>Create</Button>
+          <Button bsStyle="primary" onClick={this.createNewConference}>Create</Button>
         </Modal.Footer>
       </Modal>
     );
