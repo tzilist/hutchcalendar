@@ -120,9 +120,10 @@ export default class App extends React.Component {
       .delete(`/api/reservations/${reservationId}`)
       .end((err, res) => {
         if (err) throw err;
-        console.log(res);
+        const { events } = this.state;
+        this.setState({ events: events.filter(e => e.id !== reservationId) });
       });
-    }
+  }
 
   render() {
     return (
